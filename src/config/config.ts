@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsNotEmpty,
   Max,
@@ -16,11 +17,18 @@ export enum Environments {
 class AppConfig {
   @Min(1)
   @Max(65535)
-  port: number;
+  port = 3000;
 
   @IsNotEmpty()
   @IsEnum(Environments)
-  environment: Environments;
+  environment: Environments = Environments.development;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  apiDocsEnabled = true;
+
+  @IsNotEmpty()
+  apiDocsPath = 'api-docs';
 }
 
 class DatabaseConfig {
@@ -64,6 +72,8 @@ export default () => {
     app: plainToClass(AppConfig, {
       port: parseInt(process.env.PORT),
       environment: process.env.NODE_ENV,
+      apiDocsEnabled: process.env.ENABLE_API_DOCS === 'true',
+      apiDocsPath: process.env.API_DOCS_PATH,
     }),
     database: plainToClass(DatabaseConfig, {
       host: process.env.POSTGRES_HOST,
