@@ -7,11 +7,13 @@ services:
       dockerfile: Dockerfile
       target: local
     volumes:
-      - ./src:/home/node/app/src
+      - ./src:/home/node/app/src:ro
+      - /home/node/app/node_modules
     container_name: api
     ports:
-      - '3000:3000'
-    command: npm run start:dev
+      - '${PORT}:${PORT}'
+      - '9229:9229'
+    command: npm run start:debug
     depends_on:
       - db
     env_file:
