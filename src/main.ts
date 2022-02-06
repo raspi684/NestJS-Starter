@@ -15,7 +15,7 @@ async function bootstrap() {
 
   if (apiDocsEnabled) {
     setupApiDocs({ apiDocsPath, app });
-    logger.warn(`API docs are enabled available on /${apiDocsPath}`);
+    logger.warn(`API docs are enabled and available on /${apiDocsPath}`);
   }
 
   await app.listen(port, () => logger.log(`App is listening on port ${port}`));
