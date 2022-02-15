@@ -15,11 +15,9 @@ import appConfig from './config/app.config';
       cache: true,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => {
-        return configService.get('database');
-      },
       inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        configService.get('database'),
     }),
   ],
   controllers: [AppController],

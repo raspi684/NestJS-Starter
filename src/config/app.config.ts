@@ -2,6 +2,8 @@ import {
   IsBoolean,
   IsEnum,
   IsNotEmpty,
+  IsOptional,
+  IsString,
   Max,
   Min,
   validateSync,
@@ -29,6 +31,10 @@ class AppConfig {
   @IsNotEmpty()
   apiDocsPath = 'api-docs';
 
+  @IsOptional()
+  @IsString()
+  sentryDsn: string;
+
   constructor(config: AppConfig) {
     Object.assign(this, config);
   }
@@ -51,5 +57,6 @@ export default registerAs('app', () => {
     environment: process.env.NODE_ENV as Environments,
     apiDocsEnabled: process.env.ENABLE_API_DOCS === 'true',
     apiDocsPath: process.env.API_DOCS_PATH,
+    sentryDsn: process.env.SENTRY_DSN,
   });
 });
