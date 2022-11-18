@@ -1,7 +1,12 @@
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
-import { Logger } from '@nestjs/common';
+import {
+  ClassSerializerInterceptor,
+  Logger,
+  ValidationPipe,
+  VersioningType,
+} from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as Sentry from '@sentry/node';
 import { Integrations as TracingIntegrations } from '@sentry/tracing';
@@ -19,8 +24,8 @@ async function bootstrap() {
 
   if (apiDocsEnabled) {
     const config = new DocumentBuilder()
-      .setTitle('HNT Watch')
-      .setDescription('The HNT Watch API description')
+      .setTitle('NestJS Starter')
+      .setDescription('The NestJS Starter API description')
       .build();
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup(apiDocsPath, app, document);
@@ -40,6 +45,19 @@ async function bootstrap() {
       ],
     });
     app.useGlobalInterceptors(new SentryInterceptor());
+
+    app.useGlobalPipes(
+      new ValidationPipe({
+        transform: true,
+      }),
+    );
+    app.useGlobalInterceptors(
+      new ClassSerializerInterceptor(app.get(Reflector)),
+    );
+    app.enableVersioning({
+      type: VersioningType.URI,
+      defaultVersion: '1',
+    });
   }
 
   await app.listen(port, () => logger.log(`App is listening on port ${port}`));

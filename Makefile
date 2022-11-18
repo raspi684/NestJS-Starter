@@ -22,6 +22,9 @@ start:	## Start db and api
 start-db:	## Start only db
 	docker-compose up -d db
 
+start-api:	## Start only api (when you want see logs)
+	docker-compose up api
+
 stop:	## Stop api and db
 	docker-compose stop
 
